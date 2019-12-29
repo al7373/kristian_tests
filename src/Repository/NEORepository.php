@@ -47,4 +47,21 @@ class NEORepository extends ServiceEntityRepository
         ;
     }
     */
+
+		public function findFastest(bool $isHazardous = false)
+		{
+			$qb = $this->_em->createQueryBuilder();
+			$qb
+				->select('neo')
+				->from(NEO::class, 'neo')
+      	->where($qb->expr()->eq('neo.is_hazardous', ':h'))
+      	->setParameter('h', $isHazardous)
+			;
+			$qb
+				->orderBy('neo.speed', 'DESC')
+				->setFirstResult(0)
+				->setMaxResults(1)
+			;
+			return $qb->getQuery()->getOneOrNullResult();
+		}
 }
