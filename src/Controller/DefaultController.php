@@ -19,12 +19,10 @@ class DefaultController extends AbstractController
 
     public function index()
     {
-        $version = Kernel::VERSION;
         $projectDir = realpath($this->appKernel->getProjectDir()).\DIRECTORY_SEPARATOR;
         $docVersion = substr(Kernel::VERSION, 0, 3);
 
         return $this->render('default/welcome.html.twig', [
-            'version' => $version,
             'projectDir' => $projectDir,
             'docVersion' => $docVersion,
         ]);
