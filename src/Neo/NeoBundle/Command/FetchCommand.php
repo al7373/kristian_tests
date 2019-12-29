@@ -6,16 +6,20 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\Console\Input\InputOption;
+use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\NEO;
 
 class FetchCommand extends Command
 {
 		protected static $defaultName = 'neo:fetch';
+		private $em;
 
 		public function __construct(){
 			parent::__construct();
 		}
 
-		protected function configure(){
+		protected function configure(EntityManagerInterface $em){
+			$this->em = $em;
 			$this
 				->setDescription('to request the data since requested time from nasa api')
 				->setHelp('accept 1 option --since -s with default 3 days')
@@ -67,6 +71,7 @@ class FetchCommand extends Command
 
 			$elementCount = $content["element_count"];
 			$nearEarthObjects = $content["near_earth_objects"];
+			$neosForDb = [];
 
 			foreach($nearEarthObjects as $date => $nearEarthObjectsPerDate){
 				foreach($nearEarthObjectsPerDate as $nearEarthObject){
@@ -75,22 +80,50 @@ class FetchCommand extends Command
 					
 					$kilometersPerHour = $relativeVelocity ? $relativeVelocity["kilometers_per_hour"] : "unknown";
 
-					$isHazardous = $nearEarthObject["is_potentially_hazardous_asteroid"] ? "true" : "false";
+					$isHazardousBool = $nearEarthObject["is_potentially_hazardous_asteroid"];
+
+					$isHazardous = $isHazardousBool ? "true" : "false";
+
+					$reference = $nearEarthObject["neo_reference_id"];
+					$name = $nearEarthObject["name"];
 
 					$output->writeln([
 						"date: ".$date,
-						"reference: ".$nearEarthObject["neo_reference_id"],
-						"name: ".$nearEarthObject["name"],
+						"reference: ".$reference,
+						"name: ".$name,
 						"speed: ".$kilometersPerHour,
 						"is hazardous: ".$isHazardous,
 						"------------------------------------------------"	
 					]);
+
+					$neosForDb[] = [
+						"date" => DateTime::createFromFormat($format, $date),
+						"reference" => $reference,
+						"name" => $name,
+						"speed" => $kilometersPerHour,
+						"is_hazardous" => $isHazardousBool
+					];
 				}
 			}
 
 			$output->writeln([
 				'count of Near-Earth Objects: ' . $elementCount
 			]);
+
+			$output->writeln([
+				'saving NEOs to database'
+			]);
+
+			foreach($neosForDb as $neo){
+				$n = new NEO();
+				$n->setReference($neo["reference"]);
+				$n->setName($neo["name"]);
+				$n->setSpeed($neo["speed"]);
+				$n->setIsHazardous($neo["is_hazardous"]);
+				$this->em->persist($n);
+			}
+
+			$this->em->flush();
 
 			return 0;
 		}
