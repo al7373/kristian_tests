@@ -5,3 +5,6 @@ index:
 hello:
     path: /hello
     controller: App\Controller\DefaultController::hello
+
+neo_neobundle_routes:
+    resource: '@NeoNeoBundle/Resources/config/routes.yaml'
