@@ -26,11 +26,26 @@ class FetchCommand extends Command
 		protected function execute(InputInterface $input, OutputInterface $output){
 			$since = $input->getOption('since');
 
+			if($since < 1){
+				$output->writeln(['since must be >= 1']);
+				return -1;
+			}
+
+			if($since > 7){
+				$output->writeln(['since must be <= 7']);
+				return -1;
+			}
+
+			$currentTime = time();
+			$format = "Y-m-d";
+			$endDate = date($format, $currentTime);
+			$startDate = date($format, strtotime("-".strval($since - 1)." day", $currentTime));
+
 			$client = HttpClient::create();
-			$output->writeln(['retrieving data from nasa api']);
+			$output->writeln(['retrieving data from nasa api from '.$startDate.' to '.$endDate.'; since '.strval($since).' days']);
 			$response = $client->request(
 				'GET', 
-				'https://api.nasa.gov/neo/rest/v1/feed?detailed=true&api_key=0PwUQG3UbV278anbQuKzGOFpUKWuU2aQC8vFsXcE'
+				'https://api.nasa.gov/neo/rest/v1/feed?detailed=true&api_key=0PwUQG3UbV278anbQuKzGOFpUKWuU2aQC8vFsXcE&start_date='.$startDate.'&end_date='.$endDate
 			);
 
 			$statusCode = $response->getStatusCode();
@@ -38,7 +53,7 @@ class FetchCommand extends Command
 				$output->writeln(['data retrieved']);
 			} else {
 				$output->writeln(['an error has occured']);
-				return;
+				return -1;
 			}
 			$output->writeln(['displaying retrieved data']);
 
