@@ -2,12 +2,13 @@
 namespace App\Neo\NeoBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpClient\HttpClient;
+use App\Entity\NEO;
 
 class DefaultController extends AbstractController
 {
-    public function testNeoBundle()
+    public function hazardous()
     {
-				return $this->json(["test" => "ok"]); 
+				$r = $this->getDoctrine()->getRepository(NEO::class)->findBy(["is_hazardous" => true]);
+				return $this->json($r); 
     }
 }
