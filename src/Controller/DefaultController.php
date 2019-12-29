@@ -27,4 +27,9 @@ class DefaultController extends AbstractController
             'docVersion' => $docVersion,
         ]);
     }
+
+    public function hello()
+    {
+				return $this->json(["hello" => "world!"]); 
+    }
 }
