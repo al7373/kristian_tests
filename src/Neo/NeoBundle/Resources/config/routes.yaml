@@ -5,3 +5,7 @@ neo_neo_hazardous:
 neo_neo_fastest:
     path: /neo/fastest
     controller: App\Neo\NeoBundle\Controller\DefaultController::fastest
+
+neo_neo_fastest_hazardous:
+    path: /neo/fastest/hazardous
+    controller: App\Neo\NeoBundle\Controller\DefaultController::fastestHazardous

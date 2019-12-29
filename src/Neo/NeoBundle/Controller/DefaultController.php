@@ -17,4 +17,10 @@ class DefaultController extends AbstractController
 				$r = $this->getDoctrine()->getRepository(NEO::class)->findFastest();
 				return $this->json($r); 
     }
+
+    public function fastestHazardous()
+    {
+				$r = $this->getDoctrine()->getRepository(NEO::class)->findFastest(true);
+				return $this->json($r); 
+    }
 }
