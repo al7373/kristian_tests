@@ -1,0 +1,3 @@
+parameters:
+    neo_neo.api.key: '0PwUQG3UbV278anbQuKzGOFpUKWuU2aQC8vFsXcE'
+    neo_neo.api.base_url: 'https://api.nasa.gov/neo/'
