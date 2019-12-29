@@ -14,12 +14,12 @@ class FetchCommand extends Command
 		protected static $defaultName = 'neo:fetch';
 		private $em;
 
-		public function __construct(){
+		public function __construct(EntityManagerInterface $em){
+			$this->em = $em;
 			parent::__construct();
 		}
 
-		protected function configure(EntityManagerInterface $em){
-			$this->em = $em;
+		protected function configure(){
 			$this
 				->setDescription('to request the data since requested time from nasa api')
 				->setHelp('accept 1 option --since -s with default 3 days')
@@ -75,7 +75,7 @@ class FetchCommand extends Command
 
 			foreach($nearEarthObjects as $date => $nearEarthObjectsPerDate){
 				foreach($nearEarthObjectsPerDate as $nearEarthObject){
-					$closeApproachData = $nearEarthObject["close_approach_data"];
+					$closeApproachData = $nearEarthObject["close_approach_data"][0];
 					$relativeVelocity = array_key_exists("relative_velocity", $closeApproachData) ? $closeApproachData["relative_velocity"] : false;
 					
 					$kilometersPerHour = $relativeVelocity ? $relativeVelocity["kilometers_per_hour"] : "unknown";
@@ -97,10 +97,10 @@ class FetchCommand extends Command
 					]);
 
 					$neosForDb[] = [
-						"date" => DateTime::createFromFormat($format, $date),
-						"reference" => $reference,
+						"date" => \DateTime::createFromFormat($format, $date),
+						"reference" => intval($reference),
 						"name" => $name,
-						"speed" => $kilometersPerHour,
+						"speed" => floatval($kilometersPerHour),
 						"is_hazardous" => $isHazardousBool
 					];
 				}
@@ -116,6 +116,7 @@ class FetchCommand extends Command
 
 			foreach($neosForDb as $neo){
 				$n = new NEO();
+				$n->setDate($neo["date"]);
 				$n->setReference($neo["reference"]);
 				$n->setName($neo["name"]);
 				$n->setSpeed($neo["speed"]);
@@ -124,6 +125,10 @@ class FetchCommand extends Command
 			}
 
 			$this->em->flush();
+
+			$output->writeln([
+				'NEOs saved to database'
+			]);
 
 			return 0;
 		}
