@@ -70,7 +70,7 @@ class NEORepository extends ServiceEntityRepository
 		{
 			$rsm = new ResultSetMapping();
 			$rsm->addScalarResult("year", "best_year");
-			$query = $this->_em->createNativeQuery("SELECT YEAR(date) AS year, COUNT(id) AS count FROM neo GROUP BY year ORDER BY count DESC LIMIT 1", $rsm);
+			$query = $this->_em->createNativeQuery("SELECT YEAR(date) AS year, COUNT(id) AS count FROM neo WHERE is_hazardous = ".strval($isHazardous ? 1 : 0)." GROUP BY year ORDER BY count DESC LIMIT 1", $rsm);
 			return $query->getOneOrNullResult();
 		}
 
@@ -78,7 +78,7 @@ class NEORepository extends ServiceEntityRepository
 		{
 			$rsm = new ResultSetMapping();
 			$rsm->addScalarResult("month", "best_month");
-			$query = $this->_em->createNativeQuery("SELECT MONTH(date) AS month, COUNT(id) AS count FROM neo GROUP BY month ORDER BY count DESC LIMIT 1", $rsm);
+			$query = $this->_em->createNativeQuery("SELECT MONTH(date) AS month, COUNT(id) AS count FROM neo WHERE is_hazardous = ".strval($isHazardous ? 1 : 0)." GROUP BY month ORDER BY count DESC LIMIT 1", $rsm);
 			return $query->getOneOrNullResult();
 		}
 }
