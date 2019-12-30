@@ -3,17 +3,26 @@ neo_neo_hazardous:
     controller: App\Neo\NeoBundle\Controller\DefaultController::hazardous
 
 neo_neo_fastest:
-    path: /neo/fastest
+    path: /neo/fastest/{hazardous}
     controller: App\Neo\NeoBundle\Controller\DefaultController::fastest
+    defaults:
+        hazardous: false
+    requirements:
+        page: 'hazardous'
 
-neo_neo_fastest_hazardous:
-    path: /neo/fastest/hazardous
-    controller: App\Neo\NeoBundle\Controller\DefaultController::fastestHazardous
 
 neo_neo_best_year:
-    path: /neo/best-year
+    path: /neo/best-year/{hazardous}
     controller: App\Neo\NeoBundle\Controller\DefaultController::bestYear
+    defaults:
+        hazardous: false
+    requirements:
+        page: 'hazardous'
 
 neo_neo_best_month:
-    path: /neo/best-month
+    path: /neo/best-month/{hazardous}
     controller: App\Neo\NeoBundle\Controller\DefaultController::bestMonth
+    defaults:
+        hazardous: false
+    requirements:
+        page: 'hazardous'

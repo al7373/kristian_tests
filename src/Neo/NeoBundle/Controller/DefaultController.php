@@ -12,27 +12,21 @@ class DefaultController extends AbstractController
 				return $this->json($r); 
     }
 
-    public function fastest()
+    public function fastest($hazardous)
     {
-				$r = $this->getDoctrine()->getRepository(NEO::class)->findFastest();
+				$r = $this->getDoctrine()->getRepository(NEO::class)->findFastest($hazardous ? true : false);
 				return $this->json($r); 
     }
 
-    public function fastestHazardous()
+    public function bestYear($hazardous)
     {
-				$r = $this->getDoctrine()->getRepository(NEO::class)->findFastest(true);
+				$r = $this->getDoctrine()->getRepository(NEO::class)->bestYear($hazardous ? true : false);
 				return $this->json($r); 
     }
 
-    public function bestYear()
+    public function bestMonth($hazardous)
     {
-				$r = $this->getDoctrine()->getRepository(NEO::class)->bestYear(true);
-				return $this->json($r); 
-    }
-
-    public function bestMonth()
-    {
-				$r = $this->getDoctrine()->getRepository(NEO::class)->bestMonth(true);
+				$r = $this->getDoctrine()->getRepository(NEO::class)->bestMonth($hazardous ? true : false);
 				return $this->json($r); 
     }
 }
