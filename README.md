@@ -41,7 +41,8 @@ Cordially,
 
 Alain
 
+CET 21:33 Sunday: tasks 1,2,3,4,5,6,7 completed.
 CET 22:29 Sunday: task 8 completed.
-CET 07:43 Monday: task 9 and 10 completed. 
+CET 07:43 Monday: tasks 9 and 10 completed. 
 CET 08:25 Monday: Bonus task 1 completed. 
 CET 09:31 Monday: Bonus task 2 completed. 
