@@ -24,19 +24,24 @@ class FetchCommand extends Command
 			$this
 				->setDescription('to request the data since requested time from nasa api')
 				->setHelp('accept 1 option --since -s with default 3 days')
-				->addOption('since', null, InputOption::VALUE_REQUIRED, 'since n days', 3)
+				->addOption('since', 's', InputOption::VALUE_REQUIRED, 'since n days', 3)
+				->addOption('non-interactive', 'i', InputOption::VALUE_NONE, 'prompt can be skipped')
 			;
 		}
 
 		protected function execute(InputInterface $input, OutputInterface $output){
 
-			$helper = $this->getHelper('question');
-			$question = new ConfirmationQuestion('This is a test. Do you want to continue (y/N) ?', false);
+			$ni = $input->getOption('non-interactive');
+			if(!$ni){
+				$helper = $this->getHelper('question');
+				$question = new ConfirmationQuestion('This is a test. Do you want to continue (y/N) ?', false);
 
-			if(!$helper->ask($input, $output, $question)){
-					$output->writeln(['Nothing done. Exiting...']);
-					return 1;
+				if(!$helper->ask($input, $output, $question)){
+						$output->writeln(['Nothing done. Exiting...']);
+						return 1;
+				}
 			}
+			
 
 			$since = $input->getOption('since');
 
