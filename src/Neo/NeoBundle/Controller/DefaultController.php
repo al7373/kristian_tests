@@ -29,4 +29,10 @@ class DefaultController extends AbstractController
 				$r = $this->getDoctrine()->getRepository(NEO::class)->bestYear(true);
 				return $this->json($r); 
     }
+
+    public function bestMonth()
+    {
+				$r = $this->getDoctrine()->getRepository(NEO::class)->bestMonth(true);
+				return $this->json($r); 
+    }
 }

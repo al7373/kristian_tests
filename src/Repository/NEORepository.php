@@ -73,4 +73,12 @@ class NEORepository extends ServiceEntityRepository
 			$query = $this->_em->createNativeQuery("SELECT YEAR(date) AS year, COUNT(id) AS count FROM neo GROUP BY year ORDER BY count DESC LIMIT 1", $rsm);
 			return $query->getOneOrNullResult();
 		}
+
+		public function bestMonth(bool $isHazardous = false)
+		{
+			$rsm = new ResultSetMapping();
+			$rsm->addScalarResult("month", "best_month");
+			$query = $this->_em->createNativeQuery("SELECT MONTH(date) AS month, COUNT(id) AS count FROM neo GROUP BY month ORDER BY count DESC LIMIT 1", $rsm);
+			return $query->getOneOrNullResult();
+		}
 }

@@ -13,3 +13,7 @@ neo_neo_fastest_hazardous:
 neo_neo_best_year:
     path: /neo/best-year
     controller: App\Neo\NeoBundle\Controller\DefaultController::bestYear
+
+neo_neo_best_month:
+    path: /neo/best-month
+    controller: App\Neo\NeoBundle\Controller\DefaultController::bestMonth
