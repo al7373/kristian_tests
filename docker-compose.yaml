@@ -1,0 +1,4 @@
+version: '3.7'
+services:
+    language:
+        image: php:7.3
