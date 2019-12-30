@@ -11,3 +11,4 @@ Cordially,
 Alain
 
 CET 22:29 task 8 completed.
+CET 07:43 Monday task 9 and 10 completed. 
