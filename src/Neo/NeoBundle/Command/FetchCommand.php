@@ -8,6 +8,7 @@ use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\Console\Input\InputOption;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\NEO;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 class FetchCommand extends Command
 {
@@ -28,16 +29,25 @@ class FetchCommand extends Command
 		}
 
 		protected function execute(InputInterface $input, OutputInterface $output){
+
+			$helper = $this->getHelper('question');
+			$question = new ConfirmationQuestion('This is a test. Do you want to continue (y/N) ?', false);
+
+			if(!$helper->ask($input, $output, $question)){
+					$output->writeln(['Nothing done. Exiting...']);
+					return 1;
+			}
+
 			$since = $input->getOption('since');
 
 			if($since < 1){
 				$output->writeln(['since must be >= 1']);
-				return -1;
+				return 1;
 			}
 
 			if($since > 7){
 				$output->writeln(['since must be <= 7']);
-				return -1;
+				return 1;
 			}
 
 			$currentTime = time();
@@ -57,7 +67,7 @@ class FetchCommand extends Command
 				$output->writeln(['data retrieved']);
 			} else {
 				$output->writeln(['an error has occured']);
-				return -1;
+				return 1;
 			}
 			$output->writeln(['displaying retrieved data']);
 
