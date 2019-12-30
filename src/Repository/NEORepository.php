@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\NEO;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\Query\ResultSetMapping;
 
 /**
  * @method NEO|null find($id, $lockMode = null, $lockVersion = null)
@@ -63,5 +64,13 @@ class NEORepository extends ServiceEntityRepository
 				->setMaxResults(1)
 			;
 			return $qb->getQuery()->getOneOrNullResult();
+		}
+
+		public function bestYear(bool $isHazardous = false)
+		{
+			$rsm = new ResultSetMapping();
+			$rsm->addScalarResult("year", "best_year");
+			$query = $this->_em->createNativeQuery("SELECT YEAR(date) AS year, COUNT(id) AS count FROM neo GROUP BY year ORDER BY count DESC LIMIT 1", $rsm);
+			return $query->getOneOrNullResult();
 		}
 }

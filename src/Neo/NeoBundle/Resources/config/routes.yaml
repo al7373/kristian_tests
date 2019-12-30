@@ -9,3 +9,7 @@ neo_neo_fastest:
 neo_neo_fastest_hazardous:
     path: /neo/fastest/hazardous
     controller: App\Neo\NeoBundle\Controller\DefaultController::fastestHazardous
+
+neo_neo_best_year:
+    path: /neo/best-year
+    controller: App\Neo\NeoBundle\Controller\DefaultController::bestYear
